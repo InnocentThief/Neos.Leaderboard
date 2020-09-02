@@ -8,3 +8,5 @@
 /Database/Database.jfm
 /Database/Database.dbmdl
 /DataAccess.Entity/obj
+/DataAccess.Model/obj
+/DataAccess.Model/bin/Debug/netcoreapp3.1
