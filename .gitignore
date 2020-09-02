@@ -3,3 +3,7 @@
 ################################################################################
 
 /DataAccess.Entity/bin/Debug/netcoreapp3.1
+/Database/bin/Debug
+/Database/obj/Debug
+/Database/Database.jfm
+/Database/Database.dbmdl
