@@ -18,3 +18,7 @@
 /LeaderboardService.Business/obj
 /LeaderboardService.WebApp/bin/Debug/netcoreapp3.1
 /LeaderboardService.WebApp/obj
+/DataAccess.Entity/bin/Release/netcoreapp3.1
+/DataTransfer.Dto/bin/Release/netcoreapp3.1
+/LeaderboardService.Business/bin/Release/netcoreapp3.1
+/LeaderboardService.WebApp/bin/Release/netcoreapp3.1
