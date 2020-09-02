@@ -12,3 +12,9 @@
 /DataAccess.Model/bin/Debug/netcoreapp3.1
 /DataAccess.Repository/bin/Debug/netcoreapp3.1
 /DataAccess.Repository/obj
+/DataTransfer.Dto/bin/Debug/netcoreapp3.1
+/DataTransfer.Dto/obj
+/LeaderboardService.Business/bin/Debug/netcoreapp3.1
+/LeaderboardService.Business/obj
+/LeaderboardService.WebApp/bin/Debug/netcoreapp3.1
+/LeaderboardService.WebApp/obj
