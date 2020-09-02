@@ -8,6 +8,7 @@ using LeaderboardService.Business.Domains;
 using LeaderboardService.WebApp.Mock;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace LeaderboardService.WebApp.Controllers
 {
@@ -20,9 +21,9 @@ namespace LeaderboardService.WebApp.Controllers
         /// <summary>
         /// Initializes a new <see cref="QuestController"/>.
         /// </summary>
-        public QuestController()
+        public QuestController(IConfiguration configuration)
         {
-            questDomain = new QuestDomain();
+            questDomain = new QuestDomain(configuration);
         }
 
         /// <summary>

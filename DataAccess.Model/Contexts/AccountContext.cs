@@ -1,5 +1,6 @@
 ﻿using DataAccess.Entity.AccountEntity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Model.Contexts
 {
@@ -8,6 +9,11 @@ namespace DataAccess.Model.Contexts
     /// </summary>
     public sealed class AccountContext : BaseContext
     {
+        public AccountContext(IConfiguration iConfig): base(iConfig)
+        {
+
+        }
+
         /// <summary>
         /// Represents tha account data table.
         /// </summary>

@@ -1,5 +1,7 @@
 ﻿using DataAccess.Entity.QuestEntity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace DataAccess.Model
 {
@@ -8,6 +10,13 @@ namespace DataAccess.Model
     /// </summary>
     public abstract class BaseContext : DbContext
     {
+        private IConfiguration configuration;
+
+        public BaseContext(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
+
         /// <summary>
         /// Configures the <see cref="BaseContext"/> to connect to the proper sql server database.
         /// </summary>
@@ -15,7 +24,7 @@ namespace DataAccess.Model
         /// <exception cref="ConfigurationErrorsException">Thrown if the connection string is not configured.</exception>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // TODO: Get Connectionstring from Service-Config
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("Default"));
         }
 
         /// <summary>

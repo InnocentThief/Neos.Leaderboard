@@ -1,5 +1,6 @@
 ﻿using DataAccess.Entity.QuestEntity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Model.Contexts
 {
@@ -8,6 +9,11 @@ namespace DataAccess.Model.Contexts
     /// </summary>
     public sealed class QuestContext : BaseContext
     {
+        public QuestContext(IConfiguration configuration) : base(configuration)
+        {
+
+        }
+
         /// <summary>
         /// Represents the quest data table.
         /// </summary>
