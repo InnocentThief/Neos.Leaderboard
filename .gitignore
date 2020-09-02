@@ -10,3 +10,5 @@
 /DataAccess.Entity/obj
 /DataAccess.Model/obj
 /DataAccess.Model/bin/Debug/netcoreapp3.1
+/DataAccess.Repository/bin/Debug/netcoreapp3.1
+/DataAccess.Repository/obj
