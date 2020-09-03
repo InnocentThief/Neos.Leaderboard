@@ -1,5 +1,9 @@
 ﻿using DataAccess.Model;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace DataAccess.Repository
 {
@@ -25,5 +29,28 @@ namespace DataAccess.Repository
         /// </summary>
         /// <returns>The corresponding database context.</returns>
         protected abstract TDatabaseContext GetDatabaseContext();
+
+        /// <summary>
+        /// Saves the given entity to the database.
+        /// </summary>
+        /// <typeparam name="TEntity">The datatype of the entity to be saved.</typeparam>
+        /// <param name="entity">The entity to be saved.</param>
+        /// <param name="dbCollection">Represents the data table where the entity will be stored.</param>
+        /// <param name="predicate">A predicate to locate the unique identifier of the entity.</param>
+        public void Save<TEntity>(TEntity entity, Func<TDatabaseContext, DbSet<TEntity>> dbCollection, Expression<Func<TEntity, bool>> predicate) where TEntity : class
+        {
+            using var context = GetDatabaseContext();
+            var original = dbCollection(context).SingleOrDefault(predicate);
+            if (original == null)
+            {
+                dbCollection(context).Attach(entity);
+                context.Entry(entity).State = EntityState.Added;
+            }
+            else
+            {
+                context.Entry(original).CurrentValues.SetValues(entity);
+            }
+            context.SaveChanges();
+        }
     }
 }

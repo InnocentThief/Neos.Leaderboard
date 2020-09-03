@@ -70,6 +70,8 @@ namespace LeaderboardService.WebApp.Controllers
             if (questDto == null) throw new ArgumentNullException(nameof(questDto));
             if (questDto.AccountKey == Guid.Empty) return BadRequest();
 
+
+
             await Task.CompletedTask;
             return CreatedAtAction(nameof(GetQuestAsync), 1, new QuestDto());
         }

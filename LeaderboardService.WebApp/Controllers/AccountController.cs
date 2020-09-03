@@ -2,6 +2,7 @@
 using DataTransfer.Dto.Dtos;
 using LeaderboardService.Business.Domains;
 using LeaderboardService.WebApp.Mock;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -22,6 +23,7 @@ namespace LeaderboardService.WebApp.Controllers
         #region Private fields
 
         private readonly AccountDomatin accountDomain;
+        private readonly QuestDomain questDomain;
         private readonly ILogger logger;
 
         #endregion
@@ -33,6 +35,7 @@ namespace LeaderboardService.WebApp.Controllers
         public AccountController(IConfiguration configuration, ILogger<AccountController> logger)
         {
             accountDomain = new AccountDomatin(configuration);
+            questDomain = new QuestDomain(configuration);
             this.logger = logger;
         }
 
@@ -62,13 +65,13 @@ namespace LeaderboardService.WebApp.Controllers
         /// <summary>
         /// Retrieves all games for a given user.
         /// </summary>
-        /// <param name="username">Neos username.</param>
+        /// <param name="accountKey">Unique identifier of the account.</param>
         /// <returns>An awaitable task that returns a collection of <see cref="GameDto"/>.</returns>
         [HttpGet]
         [Route("{username}/games")]
-        public async Task<ActionResult<IEnumerable<GameDto>>> GetGamesAsync(string username)
+        public async Task<ActionResult<IEnumerable<GameDto>>> GetGamesAsync(Guid accountKey)
         {
-            if (string.IsNullOrWhiteSpace(username)) return BadRequest();
+            if (accountKey == Guid.Empty) return BadRequest();
 
             await Task.CompletedTask;
             return new List<GameDto>();
@@ -77,18 +80,24 @@ namespace LeaderboardService.WebApp.Controllers
         /// <summary>
         /// Retrieves all quests for the given user.
         /// </summary>
-        /// <param name="username">Neos username.</param>
+        /// <param name="accountKey">Unique identifier of the account.</param>
         /// <returns>An awaitable task that returns a collection of <see cref="QuestDto"/>.</returns>
         [HttpGet]
         [Route("{username}/quests")]
-        public async Task<ActionResult<IEnumerable<QuestDto>>> GetQuestsAsync(string username)
+        public async Task<ActionResult<IEnumerable<QuestDto>>> GetQuestsAsync(Guid accountKey)
         {
-            if (string.IsNullOrWhiteSpace(username)) return BadRequest();
+            try
+            {
+                if (accountKey == Guid.Empty) return BadRequest();
 
-            var quests = Mocks.GetQuests().ToList();
-
-            await Task.CompletedTask;
-            return quests;
+                var quests = await questDomain.GetQuestForAccountAsync(accountKey);
+                return quests.ToList();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }
