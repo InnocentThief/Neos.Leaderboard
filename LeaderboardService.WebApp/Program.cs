@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -21,6 +16,14 @@ namespace LeaderboardService.WebApp
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                })
+            .ConfigureLogging(logging =>
+            {
+                logging.ClearProviders();
+                logging.AddEventLog(eventlogSettings =>
+                {
+                    eventlogSettings.SourceName = "DK_N_LB";
                 });
+            });
     }
 }

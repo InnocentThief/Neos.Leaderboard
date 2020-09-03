@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace DataTransfer.Dto.Converter
 {
+    /// <summary>
+    /// Handles conversion from <see cref="Quest"/> to <see cref="QuestDto"/> and vice versa.
+    /// </summary>
     public static class QuestConverter
     {
         /// <summary>

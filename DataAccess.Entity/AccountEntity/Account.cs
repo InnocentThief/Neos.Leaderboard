@@ -21,7 +21,17 @@ namespace DataAccess.Entity.AccountEntity
         /// </summary>
         [MaxLength(100)]
         [Required]
-        public string Name { get; set; }
+        public string Username { get; set; }
+
+        /// <summary>
+        /// Gets or sets the password hash.
+        /// </summary>
+        public byte[] PasswordHash { get; set; }
+
+        /// <summary>
+        /// Gets or sets the salt for the password.
+        /// </summary>
+        public byte[] Salt { get; set; }
 
         /// <summary>
         /// Gets or sets the account related quests.

@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DataTransfer.Dto.Dtos;
-using Microsoft.AspNetCore.Http;
+﻿using DataTransfer.Dto.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace LeaderboardService.WebApp.Controllers
 {
+    /// <summary>
+    /// Handles quest step related HTTP requests.
+    /// </summary>
     [Route("api/queststeps")]
     [ApiController]
     public class QuestStepController : ControllerBase

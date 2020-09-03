@@ -1,17 +1,21 @@
 ﻿using DataAccess.Model;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 
 namespace DataAccess.Repository
 {
+    /// <summary>
+    /// Abstract base class for repositories.
+    /// </summary>
+    /// <typeparam name="TDatabaseContext"></typeparam>
     public abstract class BaseRepository<TDatabaseContext> where TDatabaseContext : BaseContext
     {
         protected IConfiguration Configuration;
 
-        public BaseRepository(IConfiguration configuration)
+        /// <summary>
+        /// Initializes a new <see cref="BaseRepository{TDatabaseContext}"/>.
+        /// </summary>
+        /// <param name="configuration">Provides access to configuration data.</param>
+        protected BaseRepository(IConfiguration configuration)
         {
             Configuration = configuration;
         }

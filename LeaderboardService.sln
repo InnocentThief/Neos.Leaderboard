@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeaderboardService.Business
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTransfer.Dto", "DataTransfer.Dto\DataTransfer.Dto.csproj", "{A8214BE0-08F3-4DDA-8912-6D0DF029D330}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework", "Framework\Framework.csproj", "{F3A092A7-E596-4289-8FA6-9D60C5830C33}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{A8214BE0-08F3-4DDA-8912-6D0DF029D330}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8214BE0-08F3-4DDA-8912-6D0DF029D330}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8214BE0-08F3-4DDA-8912-6D0DF029D330}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3A092A7-E596-4289-8FA6-9D60C5830C33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3A092A7-E596-4289-8FA6-9D60C5830C33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3A092A7-E596-4289-8FA6-9D60C5830C33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3A092A7-E596-4289-8FA6-9D60C5830C33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

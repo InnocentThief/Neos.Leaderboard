@@ -11,7 +11,7 @@ namespace LeaderboardService.Business.Domains
 {
     public sealed class QuestDomain
     {
-        private QuestRepository questRepository;
+        private readonly QuestRepository questRepository;
 
         public QuestDomain(IConfiguration configuration)
         {

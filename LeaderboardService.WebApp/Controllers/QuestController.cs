@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using DataTransfer.Dto.Dtos;
+﻿using DataTransfer.Dto.Dtos;
 using LeaderboardService.Business.Domains;
 using LeaderboardService.WebApp.Mock;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LeaderboardService.WebApp.Controllers
 {
+    /// <summary>
+    /// Handles quest related HTTP requests.
+    /// </summary>
     [Route("api/quests")]
     [ApiController]
     public class QuestController : ControllerBase

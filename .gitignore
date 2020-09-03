@@ -22,3 +22,7 @@
 /DataTransfer.Dto/bin/Release/netcoreapp3.1
 /LeaderboardService.Business/bin/Release/netcoreapp3.1
 /LeaderboardService.WebApp/bin/Release/netcoreapp3.1
+/DataAccess.Model/bin/Release/netcoreapp3.1
+/DataAccess.Repository/bin/Release/netcoreapp3.1
+/Framework/bin
+/Framework/obj
