@@ -101,6 +101,8 @@ namespace LeaderboardService.WebApp.Controllers
         {
             if (questKey == Guid.Empty) throw new ArgumentNullException(nameof(questKey));
 
+            questDomain.DeleteQuest(questKey);
+
             await Task.CompletedTask;
             return new QuestDto();
         }

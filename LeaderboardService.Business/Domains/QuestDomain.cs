@@ -22,6 +22,15 @@ namespace LeaderboardService.Business.Domains
         }
 
         /// <summary>
+        /// Deletes the quest with the given key.
+        /// </summary>
+        /// <param name="questKey">Unique identifier of the quest.</param>
+        public void DeleteQuest(Guid questKey)
+        {
+
+        }
+
+        /// <summary>
         /// Retrieves all quests associated to the given account key.
         /// </summary>
         /// <param name="accountKey">Unique identifier of the account for which to get all quests.</param>
@@ -30,6 +39,12 @@ namespace LeaderboardService.Business.Domains
         {
             var quests = await questRepository.GetQuestsForAccountAsync(accountKey);
             return quests.ToList().ToDtos();
+        }
+
+        public async Task<IEnumerable<QuestStepDto>> GetQuestStepsAsync(Guid questKey)
+        {
+            var questSteps = await questRepository.GetQuestStepsAsync(questKey);
+            return questSteps.ToList().ToDtos();
         }
 
         /// <summary>

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DataTransfer.Dto.Dtos
 {
@@ -9,5 +7,19 @@ namespace DataTransfer.Dto.Dtos
     /// </summary>
     public class GameDto
     {
+        /// <summary>
+        /// Gets or sets the unique identifier of the game.
+        /// </summary>
+        public Guid GameKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unique identifier of the associeted account.
+        /// </summary>
+        public Guid AccountKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the game.
+        /// </summary>
+        public string Name { get; set; }
     }
 }

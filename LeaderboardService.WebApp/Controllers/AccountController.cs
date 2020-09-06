@@ -68,7 +68,7 @@ namespace LeaderboardService.WebApp.Controllers
         /// <param name="accountKey">Unique identifier of the account.</param>
         /// <returns>An awaitable task that returns a collection of <see cref="GameDto"/>.</returns>
         [HttpGet]
-        [Route("{username}/games")]
+        [Route("{accountKey}/games")]
         public async Task<ActionResult<IEnumerable<GameDto>>> GetGamesAsync(Guid accountKey)
         {
             if (accountKey == Guid.Empty) return BadRequest();
@@ -83,7 +83,7 @@ namespace LeaderboardService.WebApp.Controllers
         /// <param name="accountKey">Unique identifier of the account.</param>
         /// <returns>An awaitable task that returns a collection of <see cref="QuestDto"/>.</returns>
         [HttpGet]
-        [Route("{username}/quests")]
+        [Route("{accountKey}/quests")]
         public async Task<ActionResult<IEnumerable<QuestDto>>> GetQuestsAsync(Guid accountKey)
         {
             try

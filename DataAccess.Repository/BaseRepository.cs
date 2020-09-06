@@ -31,6 +31,23 @@ namespace DataAccess.Repository
         protected abstract TDatabaseContext GetDatabaseContext();
 
         /// <summary>
+        /// Deletes the entity with the given primary key selector.
+        /// </summary>
+        /// <typeparam name="TEnity">The datatabe of the entity to be deleted.</typeparam>
+        /// <param name="dbCollection">Represents the data table where the entity will be delete / removed from.</param>
+        /// <param name="primaryKeySelector">A predicate to locate the unique identifier of the existing entity.</param>
+        public void Delete<TEnity>(Func<TDatabaseContext, DbSet<TEnity>> dbCollection, Expression<Func<TEnity, bool>> primaryKeySelector) where TEnity : class
+        {
+            using var context = GetDatabaseContext();
+            var original = dbCollection(context).SingleOrDefault(primaryKeySelector);
+            if (original != null)
+            {
+                context.Entry(original).State = EntityState.Deleted;
+                context.SaveChanges();
+            }
+        }
+
+        /// <summary>
         /// Saves the given entity to the database.
         /// </summary>
         /// <typeparam name="TEntity">The datatype of the entity to be saved.</typeparam>

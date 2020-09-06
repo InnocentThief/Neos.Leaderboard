@@ -48,6 +48,14 @@ namespace DataAccess.Repository
                 .ToListAsync();
         }
 
-
+        public async Task<IEnumerable<QuestStep>> GetQuestStepsAsync(Guid questKey)
+        {
+            using var context = GetDatabaseContext();
+            return await context.QuestStep
+                .AsNoTracking()
+                .Where(qs => qs.QuestKey == questKey)
+                .OrderBy(qs => qs.SortOrder)
+                .ToListAsync();
+        }
     }
 }

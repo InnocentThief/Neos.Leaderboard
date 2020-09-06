@@ -1,5 +1,7 @@
 ﻿using DataTransfer.Dto.Dtos;
+using LeaderboardService.Business.Domains;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
 
@@ -12,6 +14,13 @@ namespace LeaderboardService.WebApp.Controllers
     [ApiController]
     public class QuestStepController : ControllerBase
     {
+        private QuestDomain questDomain;
+
+        public QuestStepController(IConfiguration configuration)
+        {
+            questDomain = new QuestDomain(configuration);
+        }
+
         /// <summary>
         /// Retrieves the quest step for the given key.
         /// </summary>

@@ -61,6 +61,7 @@ namespace DataTransfer.Dto.Converter
         /// Converts a given list of <see cref="QuestDto"/> to a list of <see cref="Quest"/>.
         /// </summary>
         /// <param name="dtos">The dtos to transform into their entity object equvalents.</param>
+        /// <exception cref="ArgumentNullException">Thrown if dtos is null.</exception>
         public static ICollection<Quest> ToEntities(this ICollection<QuestDto> dtos)
         {
             if (dtos == null) throw new ArgumentNullException(nameof(dtos));
