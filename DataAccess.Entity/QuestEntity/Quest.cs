@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 namespace DataAccess.Entity.QuestEntity
 {
     /// <summary>
-    /// Respresents a quest created by an account with multiple steps.
+    /// Respresents a quest with multiple steps created by an account.
     /// </summary>
     public sealed class Quest
     {

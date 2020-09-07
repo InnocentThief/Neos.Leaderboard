@@ -34,6 +34,11 @@ namespace LeaderboardService.Business.Domains
             questStepProgressionRepository = new QuestStepProgressionRepository(configuration);
         }
 
+        /// <summary>
+        /// Adds a new progress entry to the quest step for the given account.
+        /// </summary>
+        /// <param name="questStepProgressionDto">Contains the quest step progression data.</param>
+        /// <returns>An awaitable task that returns true if the quest step progression has been added.</returns>
         public async Task<bool> ProgressAsync(QuestStepProgressionDto questStepProgressionDto)
         {
             // Get account
@@ -43,6 +48,9 @@ namespace LeaderboardService.Business.Domains
             // Get quest steps
             var questStep = await questRepository.GetQuestStepAsync(questStepProgressionDto.QuestStepKey);
             if (questStep == null) return false;
+
+            var existingQuestStepProgression = await questStepProgressionRepository.GetQuestStepProgressionAsync(questStepProgressionDto.QuestStepKey, account.AccountKey);
+            if (existingQuestStepProgression != null) return false;
 
             // Check if previous quest step is done
             if (questStep.SortOrder > 0)

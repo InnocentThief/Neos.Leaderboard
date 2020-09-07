@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DataAccess.Repository
@@ -53,6 +54,20 @@ namespace DataAccess.Repository
         }
 
         /// <summary>
+        /// Retrieves the quest for the given key.
+        /// </summary>
+        /// <param name="questKey">Unique identifier of the quest.</param>
+        /// <returns>An awaitable task that returns the requested <see cref="Quest"/>.</returns>
+        public async Task<Quest> GetQuestAsync(Guid questKey)
+        {
+            using var context = GetDatabaseContext();
+            return await context.Quest
+                .AsNoTracking()
+                .Include(q => q.QuestSteps)
+                .SingleOrDefaultAsync(q => q.QuestKey == questKey);
+        }
+
+        /// <summary>
         /// Retrieves all quests associated to the given account key.
         /// </summary>
         /// <param name="accountKey">Unique identifier of the account for which to get all quests.</param>
@@ -94,6 +109,24 @@ namespace DataAccess.Repository
                 .AsNoTracking()
                 .Where(qs => qs.QuestKey == questKey)
                 .OrderBy(qs => qs.SortOrder)
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Retrieves the leader board entries for a given quest.
+        /// </summary>
+        /// <param name="questKey">Unique identifier of the quest for which to get the leader board.</param>
+        /// <returns>An awaitable task that returns a collection of <see cref="QuestLeaderboardEntry"/>.</returns>
+        public async Task<IEnumerable<QuestLeaderboardEntry>> GetLeaderboardAsync(Guid questKey)
+        {
+            using var context = GetDatabaseContext();
+            return await context.QuestStepProgression
+                .AsNoTracking()
+                .Include(qsp => qsp.Account)
+                .Where(qsp => qsp.QuestStep.QuestKey == questKey)
+                .GroupBy(qsp => qsp.Account.Username)
+                .Select(g => new QuestLeaderboardEntry { Username = g.Key, QuestStepsDone = g.Count() })
+                .OrderByDescending(lb => lb.QuestStepsDone)
                 .ToListAsync();
         }
     }

@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Entity.GameEntity
 {
+    /// <summary>
+    /// Represents a game create by an account.
+    /// </summary>
     public class Game
     {
         /// <summary>

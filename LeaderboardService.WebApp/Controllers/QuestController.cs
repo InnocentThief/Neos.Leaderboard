@@ -45,8 +45,8 @@ namespace LeaderboardService.WebApp.Controllers
         {
             if (questKey == Guid.Empty) return BadRequest();
 
-            await Task.CompletedTask;
-            return new QuestDto();
+            var quest = await questDomain.GetQuestAsync(questKey);
+            return quest;
         }
 
         /// <summary>
@@ -64,6 +64,29 @@ namespace LeaderboardService.WebApp.Controllers
             {
                 var questSteps = await questDomain.GetQuestStepsAsync(questKey);
                 return questSteps.ToList();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the leader board for the given quest key.
+        /// </summary>
+        /// <param name="questKey">Unique identifier of the quest for which to get the leader board.</param>
+        /// <returns>An awaitable task that returns a collection of <see cref="QuestLeaderboardEntryDto"/>.</returns>
+        [HttpGet]
+        [Route("{questKey}/leaderboard")]
+        public async Task<ActionResult<IEnumerable<QuestLeaderboardEntryDto>>> GetLeaderboardAsync(Guid questKey)
+        {
+            if (questKey == Guid.Empty) return BadRequest();
+
+            try
+            {
+                var leaderboardEntry = await questDomain.GetLeaderboardAsync(questKey);
+                return leaderboardEntry.ToList();
             }
             catch (Exception ex)
             {

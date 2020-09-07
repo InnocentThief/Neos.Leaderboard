@@ -44,6 +44,17 @@ namespace LeaderboardService.Business.Domains
         }
 
         /// <summary>
+        /// Retriees the quest for the given key.
+        /// </summary>
+        /// <param name="questKey">Unique identifier of the quest.</param>
+        /// <returns>An awaitable task that returns a <see cref="QuestDto"/>.</returns>
+        public async Task<QuestDto> GetQuestAsync(Guid questKey)
+        {
+            var quest = await questRepository.GetQuestAsync(questKey);
+            return quest.ToDto();
+        }
+
+        /// <summary>
         /// Retrieves all quests associated to the given account key.
         /// </summary>
         /// <param name="accountKey">Unique identifier of the account for which to get all quests.</param>
@@ -58,6 +69,17 @@ namespace LeaderboardService.Business.Domains
         {
             var questSteps = await questRepository.GetQuestStepsAsync(questKey);
             return questSteps.ToList().ToDtos();
+        }
+
+        /// <summary>
+        /// Retrieves the leader board for the given guest key.
+        /// </summary>
+        /// <param name="questKey"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<QuestLeaderboardEntryDto>> GetLeaderboardAsync(Guid questKey)
+        {
+            var leaderboardEntries = await questRepository.GetLeaderboardAsync(questKey);
+            return leaderboardEntries.ToList().ToDtos();
         }
 
         /// <summary>
