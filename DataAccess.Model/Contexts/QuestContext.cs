@@ -23,5 +23,10 @@ namespace DataAccess.Model.Contexts
         /// Represents the quest step data table.
         /// </summary>
         public DbSet<QuestStep> QuestStep { get; set; }
+
+        /// <summary>
+        /// Represents the quest step progression data table.
+        /// </summary>
+        public DbSet<QuestStepProgression> QuestStepProgression { get; set; }
     }
 }

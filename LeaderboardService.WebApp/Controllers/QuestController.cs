@@ -1,8 +1,9 @@
 ﻿using DataTransfer.Dto.Dtos;
 using LeaderboardService.Business.Domains;
-using LeaderboardService.WebApp.Mock;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,14 +18,20 @@ namespace LeaderboardService.WebApp.Controllers
     [ApiController]
     public class QuestController : ControllerBase
     {
-        private QuestDomain questDomain;
+        #region Private fields
+
+        private readonly QuestDomain questDomain;
+        private readonly ILogger logger;
+
+        #endregion
 
         /// <summary>
         /// Initializes a new <see cref="QuestController"/>.
         /// </summary>
-        public QuestController(IConfiguration configuration)
+        public QuestController(IConfiguration configuration, ILogger<QuestController> logger)
         {
             questDomain = new QuestDomain(configuration);
+            this.logger = logger;
         }
 
         /// <summary>
@@ -53,10 +60,16 @@ namespace LeaderboardService.WebApp.Controllers
         {
             if (questKey == Guid.Empty) return BadRequest();
 
-            var questSteps = Mocks.GetQuestSteps().ToList();
-
-            await Task.CompletedTask;
-            return questSteps;
+            try
+            {
+                var questSteps = await questDomain.GetQuestStepsAsync(questKey);
+                return questSteps.ToList();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         /// <summary>
@@ -65,46 +78,45 @@ namespace LeaderboardService.WebApp.Controllers
         /// <param name="questDto">The quest to create.</param>
         /// <returns>An awaitable task that creates a new quest and returns the <see cref="QuestDto"/>/>.</returns>
         [HttpPost]
-        public async Task<ActionResult<QuestDto>> PostQuestAsync(QuestDto questDto)
+        public async Task<ActionResult> PostQuestAsync(QuestDto questDto)
         {
             if (questDto == null) throw new ArgumentNullException(nameof(questDto));
             if (questDto.AccountKey == Guid.Empty) return BadRequest();
 
-
-
-            await Task.CompletedTask;
-            return CreatedAtAction(nameof(GetQuestAsync), 1, new QuestDto());
-        }
-
-        /// <summary>
-        /// Updates the given quest.
-        /// </summary>
-        /// <param name="questDto">The quest to update.</param>
-        /// <returns>An awaitable task that yields no return value.</returns>
-        [HttpPut]
-        public async Task<IActionResult> PutQuestAsync(QuestDto questDto)
-        {
-            if (questDto == null) throw new ArgumentNullException(nameof(questDto));
-            if (questDto.QuestKey == Guid.Empty) return BadRequest();
-
-            await Task.CompletedTask;
-            return NoContent();
+            try
+            {
+                questDomain.SaveQuest(questDto);
+                await Task.CompletedTask;
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         /// <summary>
         /// Deletes the quest with the given key.
         /// </summary>
         /// <param name="questKey">Unique identifier of the quest to delete.</param>
-        /// <returns>An awaitable task that returns the dto of the deleted quest.</returns>
+        /// <returns>An awaitable task that yields no return value.</returns>
         [HttpDelete]
-        public async Task<ActionResult<QuestDto>> DeleteQuestAsync(Guid questKey)
+        public async Task<ActionResult> DeleteQuestAsync(Guid questKey)
         {
             if (questKey == Guid.Empty) throw new ArgumentNullException(nameof(questKey));
 
-            questDomain.DeleteQuest(questKey);
-
-            await Task.CompletedTask;
-            return new QuestDto();
+            try
+            {
+                questDomain.DeleteQuest(questKey);
+                await Task.CompletedTask;
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

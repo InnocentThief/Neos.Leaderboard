@@ -18,7 +18,7 @@ namespace LeaderboardService.Business.Domains
         /// Initializes a new <see cref="AccountDomatin"/>.
         /// </summary>
         /// <param name="configuration">Provides access to configuration data.</param>
-        public AccountDomatin(IConfiguration configuration)
+        public AccountDomatin(IConfiguration configuration
         {
             accountRepository = new AccountRepository(configuration);
         }

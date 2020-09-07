@@ -3,7 +3,6 @@ using DataAccess.Model.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,20 +33,60 @@ namespace DataAccess.Repository
         }
 
         /// <summary>
+        /// Deletes the quest with the given key.
+        /// </summary>
+        /// <param name="questKey">Unique identifier of the quest to delete.</param>
+        public void DeleteQuest(Guid questKey)
+        {
+            using var context = GetDatabaseContext();
+            Delete(context => context.Quest, q => q.QuestKey == questKey);
+        }
+
+        /// <summary>
+        /// Deletes the quest step with the given key.
+        /// </summary>
+        /// <param name="questStepKey">Unique identifier of the quest step to delete.</param>
+        public void DeleteQuestStep(Guid questStepKey)
+        {
+            using var context = GetDatabaseContext();
+            Delete(context => context.QuestStep, qs => qs.QuestStepKey == questStepKey);
+        }
+
+        /// <summary>
         /// Retrieves all quests associated to the given account key.
         /// </summary>
         /// <param name="accountKey">Unique identifier of the account for which to get all quests.</param>
         /// <returns>An awaitable task that returns a collection of <see cref="Quest"/>.</returns>
+        /// <remarks>Includes the quest steps.</remarks>
         public async Task<IEnumerable<Quest>> GetQuestsForAccountAsync(Guid accountKey)
         {
             using var context = GetDatabaseContext();
             return await context.Quest
                 .AsNoTracking()
+                .Include(q => q.QuestSteps)
                 .Where(q => q.AccountKey == accountKey)
                 .OrderBy(q => q.Name)
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Retrieves the quest step for the given quest step key.
+        /// </summary>
+        /// <param name="questStepKey">Unique identifier of the quest step.</param>
+        /// <returns>An awaitable task that returns the requested quest step.</returns>
+        public async Task<QuestStep> GetQuestStepAsync(Guid questStepKey)
+        {
+            using var context = GetDatabaseContext();
+            return await context.QuestStep
+                .AsNoTracking()
+                .SingleOrDefaultAsync(qs => qs.QuestStepKey == questStepKey);
+        }
+
+        /// <summary>
+        /// Retrieves the quest steps for the given quest key.
+        /// </summary>
+        /// <param name="questKey">Unique identifier of the associated quest.</param>
+        /// <returns>An awaitable task that returns a collection of quest steps.</returns>
         public async Task<IEnumerable<QuestStep>> GetQuestStepsAsync(Guid questKey)
         {
             using var context = GetDatabaseContext();

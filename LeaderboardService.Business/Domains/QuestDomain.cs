@@ -16,6 +16,10 @@ namespace LeaderboardService.Business.Domains
     {
         private readonly QuestRepository questRepository;
 
+        /// <summary>
+        /// Initializes a new <see cref="QuestDomain"/>.
+        /// </summary>
+        /// <param name="configuration">Provides access to configuration data.</param>
         public QuestDomain(IConfiguration configuration)
         {
             questRepository = new QuestRepository(configuration);
@@ -27,7 +31,16 @@ namespace LeaderboardService.Business.Domains
         /// <param name="questKey">Unique identifier of the quest.</param>
         public void DeleteQuest(Guid questKey)
         {
+            questRepository.DeleteQuest(questKey);
+        }
 
+        /// <summary>
+        /// Deletes the quest step with the given key.
+        /// </summary>
+        /// <param name="questStepKey">Unique identifier of the quest step.</param>
+        public void DeleteQuestStep(Guid questStepKey)
+        {
+            questRepository.DeleteQuestStep(questStepKey);
         }
 
         /// <summary>
@@ -55,6 +68,16 @@ namespace LeaderboardService.Business.Domains
         {
             var entity = questDto.ToEntity();
             questRepository.Save(entity, ctx => ctx.Quest, q => q.QuestKey == questDto.QuestKey);
+        }
+
+        /// <summary>
+        /// Saves the given quest step.
+        /// </summary>
+        /// <param name="questStepDto">Transfer object representing the quest step to save.</param>
+        public void SaveQuestStep(QuestStepDto questStepDto)
+        {
+            var entity = questStepDto.ToEntity();
+            questRepository.Save(entity, ctx => ctx.QuestStep, qs => qs.QuestStepKey == questStepDto.QuestStepKey);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace DataTransfer.Dto.Dtos
 {
@@ -11,7 +10,6 @@ namespace DataTransfer.Dto.Dtos
         /// <summary>
         /// Gets or sets the unique identifier of the quest.
         /// </summary>
-        [Key]
         public Guid QuestKey { get; set; }
 
         /// <summary>
@@ -22,8 +20,16 @@ namespace DataTransfer.Dto.Dtos
         /// <summary>
         /// Gets or sets the name of the quest.
         /// </summary>
-        [MaxLength(100)]
-        [Required]
         public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the description of the quest.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the amount of steps the quest has.
+        /// </summary>
+        public int StepCount { get; set; }
     }
 }

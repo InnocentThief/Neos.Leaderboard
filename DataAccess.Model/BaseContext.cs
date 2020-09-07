@@ -1,7 +1,6 @@
 ﻿using DataAccess.Entity.QuestEntity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace DataAccess.Model
 {
@@ -44,6 +43,7 @@ namespace DataAccess.Model
         {
             modelBuilder.Entity<Quest>().HasOne(q => q.Account).WithMany(a => a.Quests).HasForeignKey(q => q.AccountKey);
             modelBuilder.Entity<QuestStep>().HasOne(qs => qs.Quest).WithMany(q => q.QuestSteps).HasForeignKey(qs => qs.QuestKey);
+            modelBuilder.Entity<QuestStepProgression>().HasOne(qsp => qsp.QuestStep).WithMany().HasForeignKey(qsp => qsp.QuestStepKey)
         }
     }
 }

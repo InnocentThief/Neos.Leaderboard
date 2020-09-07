@@ -63,5 +63,6 @@
     <Build Include="dbo\Tables\Account.sql" />
     <Build Include="dbo\Tables\QuestStep.sql" />
     <Build Include="dbo\Tables\Quest.sql" />
+    <Build Include="dbo\Tables\QuestStepProgression.sql" />
   </ItemGroup>
 </Project>

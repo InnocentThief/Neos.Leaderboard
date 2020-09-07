@@ -23,8 +23,10 @@ namespace DataTransfer.Dto.Converter
             return new QuestDto
             {
                 AccountKey = entity.AccountKey,
+                Description = entity.Description,
                 Name = entity.Name,
-                QuestKey = entity.QuestKey
+                QuestKey = entity.QuestKey,
+                StepCount = entity.QuestSteps != null ? entity.QuestSteps.Count() : 0
             };
         }
 
@@ -52,6 +54,7 @@ namespace DataTransfer.Dto.Converter
             return new Quest
             {
                 AccountKey = dto.AccountKey,
+                Description = dto.Description,
                 Name = dto.Name,
                 QuestKey = dto.QuestKey
             };

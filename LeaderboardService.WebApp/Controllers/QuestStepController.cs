@@ -1,7 +1,9 @@
 ﻿using DataTransfer.Dto.Dtos;
 using LeaderboardService.Business.Domains;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -14,11 +16,17 @@ namespace LeaderboardService.WebApp.Controllers
     [ApiController]
     public class QuestStepController : ControllerBase
     {
-        private QuestDomain questDomain;
+        #region Private fields
 
-        public QuestStepController(IConfiguration configuration)
+        private readonly QuestDomain questDomain;
+        private readonly ILogger logger;
+
+        #endregion
+
+        public QuestStepController(IConfiguration configuration, ILogger<QuestStepController> logger)
         {
             questDomain = new QuestDomain(configuration);
+            this.logger = logger;
         }
 
         /// <summary>
@@ -42,30 +50,45 @@ namespace LeaderboardService.WebApp.Controllers
         /// <param name="questStepDto">The quest step to create.</param>
         /// <returns>An awaitable task that create a new quest step and returns the <see cref="QuestStepDto"/>.</returns>
         [HttpPost]
-        public async Task<ActionResult<QuestStepDto>> PostQuestStepAsync(QuestStepDto questStepDto)
+        public async Task<ActionResult> PostQuestStepAsync(QuestStepDto questStepDto)
         {
             if (questStepDto == null) throw new ArgumentNullException(nameof(questStepDto));
             if (questStepDto.QuestKey == Guid.Empty) return BadRequest();
 
-            await Task.CompletedTask;
-            return CreatedAtAction(nameof(GetQuestStepAsync), 1, new QuestStepDto());
+            try
+            {
+                questDomain.SaveQuestStep(questStepDto);
+                await Task.CompletedTask;
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         /// <summary>
-        /// Update the given quest step.
+        /// Deletes the quest step with the given key.
         /// </summary>
-        /// <param name="questStepDto">The quest step to update.</param>
+        /// <param name="questStepKey">Unique identifier of the quest step to delete.</param>
         /// <returns>An awaitable task that yields no return value.</returns>
-        [HttpPut]
-        public async Task<IActionResult> PutQuestStepAsync(QuestStepDto questStepDto)
+        [HttpDelete]
+        public async Task<ActionResult> DeleteQuestStepAsync(Guid questStepKey)
         {
-            if (questStepDto == null) throw new ArgumentNullException(nameof(questStepDto));
-            if (questStepDto.QuestStepKey == Guid.Empty) return BadRequest();
+            if (questStepKey == Guid.Empty) throw new ArgumentNullException(nameof(questStepKey));
 
-            await Task.CompletedTask;
-            return NoContent();
+            try
+            {
+                questDomain.DeleteQuestStep(questStepKey);
+                await Task.CompletedTask;
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
-
-
     }
 }

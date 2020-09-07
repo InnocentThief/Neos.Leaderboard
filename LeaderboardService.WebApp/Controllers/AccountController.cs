@@ -2,6 +2,7 @@
 using DataTransfer.Dto.Dtos;
 using LeaderboardService.Business.Domains;
 using LeaderboardService.WebApp.Mock;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -48,10 +49,10 @@ namespace LeaderboardService.WebApp.Controllers
         [Route("")]
         public async Task<ActionResult<AccountDto>> LoginAsync(LoginDto loginDto)
         {
+            if (loginDto == null) return BadRequest();
+
             try
             {
-                if (loginDto == null) return BadRequest();
-
                 var account = await accountDomain.LoginAsync(loginDto.Username, loginDto.Password);
                 return account.ToDto(); ;
             }
@@ -73,8 +74,16 @@ namespace LeaderboardService.WebApp.Controllers
         {
             if (accountKey == Guid.Empty) return BadRequest();
 
-            await Task.CompletedTask;
-            return new List<GameDto>();
+            try
+            {
+                await Task.CompletedTask;
+                return new List<GameDto>();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         /// <summary>
@@ -86,10 +95,10 @@ namespace LeaderboardService.WebApp.Controllers
         [Route("{accountKey}/quests")]
         public async Task<ActionResult<IEnumerable<QuestDto>>> GetQuestsAsync(Guid accountKey)
         {
+            if (accountKey == Guid.Empty) return BadRequest();
+
             try
             {
-                if (accountKey == Guid.Empty) return BadRequest();
-
                 var quests = await questDomain.GetQuestForAccountAsync(accountKey);
                 return quests.ToList();
             }
