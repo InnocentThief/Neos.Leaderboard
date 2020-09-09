@@ -1,5 +1,6 @@
 ﻿using DataAccess.Entity.QuestEntity;
 using DataTransfer.Dto.Dtos;
+using Framework.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,8 +54,8 @@ namespace DataTransfer.Dto.Converter
 
             return new QuestStep
             {
-                Description = dto.Description,
-                Name = dto.Name,
+                Description = dto.Description.JsonCleanUp(),
+                Name = dto.Name.JsonCleanUp(),
                 QuestKey = dto.QuestKey,
                 QuestStepKey = dto.QuestStepKey,
                 SortOrder = dto.SortOrder

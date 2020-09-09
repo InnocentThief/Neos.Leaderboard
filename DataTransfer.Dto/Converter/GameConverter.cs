@@ -1,5 +1,6 @@
 ﻿using DataAccess.Entity.GameEntity;
 using DataTransfer.Dto.Dtos;
+using Framework.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,7 +54,7 @@ namespace DataTransfer.Dto.Converter
             {
                 AccountKey = dto.AccountKey,
                 GameKey = dto.GameKey,
-                Name = dto.Name
+                Name = dto.Name.JsonCleanUp()
             };
         }
 

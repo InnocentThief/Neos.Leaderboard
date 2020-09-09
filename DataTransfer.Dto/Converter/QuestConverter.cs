@@ -1,5 +1,6 @@
 ﻿using DataAccess.Entity.QuestEntity;
 using DataTransfer.Dto.Dtos;
+using Framework.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace DataTransfer.Dto.Converter
                 Description = entity.Description,
                 Name = entity.Name,
                 QuestKey = entity.QuestKey,
-                StepCount = entity.QuestSteps != null ? entity.QuestSteps.Count() : 0
+                StepCount = entity.QuestSteps != null ? entity.QuestSteps.Count().ToString() : "0"
             };
         }
 
@@ -54,8 +55,8 @@ namespace DataTransfer.Dto.Converter
             return new Quest
             {
                 AccountKey = dto.AccountKey,
-                Description = dto.Description,
-                Name = dto.Name,
+                Description = dto.Description.JsonCleanUp(),
+                Name = dto.Name.JsonCleanUp(),
                 QuestKey = dto.QuestKey
             };
         }

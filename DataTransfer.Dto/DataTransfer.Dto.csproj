@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAccess.Entity\DataAccess.Entity.csproj" />
+    <ProjectReference Include="..\Framework\Framework.csproj" />
   </ItemGroup>
 
 </Project>

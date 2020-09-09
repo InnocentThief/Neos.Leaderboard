@@ -30,6 +30,6 @@ namespace DataTransfer.Dto.Dtos
         /// <summary>
         /// Gets or sets the amount of steps the quest has.
         /// </summary>
-        public int StepCount { get; set; }
+        public string StepCount { get; set; }
     }
 }

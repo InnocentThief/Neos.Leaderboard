@@ -1,5 +1,6 @@
 ﻿using DataAccess.Entity.AccountEntity;
 using DataTransfer.Dto.Dtos;
+using Framework.Extensions;
 using System;
 
 namespace DataTransfer.Dto.Converter
@@ -37,7 +38,7 @@ namespace DataTransfer.Dto.Converter
             return new Account
             {
                 AccountKey = dto.AccountKey,
-                Username = dto.Username,
+                Username = dto.Username.JsonCleanUp(),
             };
         }
     }
