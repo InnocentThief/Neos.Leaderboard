@@ -1,8 +1,6 @@
 ﻿using DataTransfer.Dto.Converter;
 using DataTransfer.Dto.Dtos;
 using LeaderboardService.Business.Domains;
-using LeaderboardService.WebApp.Mock;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;

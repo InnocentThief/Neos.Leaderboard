@@ -75,11 +75,45 @@ namespace LeaderboardService.Business.Domains
         /// Retrieves the leader board for the given guest key.
         /// </summary>
         /// <param name="questKey"></param>
-        /// <returns></returns>
+        /// <returns>An awaitable task that returns the requested leader board.</returns>
         public async Task<IEnumerable<QuestLeaderboardEntryDto>> GetLeaderboardAsync(Guid questKey)
         {
             var leaderboardEntries = await questRepository.GetLeaderboardAsync(questKey);
             return leaderboardEntries.ToList().ToDtos();
+        }
+
+        /// <summary>
+        /// Moves the quest step with the given key on place up (and changes the previous quest step.
+        /// </summary>
+        /// <param name="questStepKey">Unique identifier of the quest step.</param>
+        /// <returns>An awaitable task that yields no retrun value.</returns>
+        public async Task MoveDownAsync(Guid questStepKey)
+        {
+            var questStep = await questRepository.GetQuestStepAsync(questStepKey);
+
+            var previousQuestStep = await questRepository.GetPreviousQuestStepAsync(questStep.QuestKey, questStep.SortOrder);
+            if (previousQuestStep == null) return;
+            previousQuestStep.SortOrder++;
+            questRepository.Save(previousQuestStep, ctx => ctx.QuestStep, qs => qs.QuestStepKey == previousQuestStep.QuestStepKey);
+            questStep.SortOrder--;
+            questRepository.Save(questStep, ctx => ctx.QuestStep, qs => qs.QuestStepKey == questStep.QuestStepKey);
+        }
+
+        /// <summary>
+        /// Moves the quest step with the given key on place down (and changes the next quest step.
+        /// </summary>
+        /// <param name="questStepKey">Unique identifier of the quest step.</param>
+        /// <returns>An awaitable task that yields no return value.</returns>
+        public async Task MoveUpAsync(Guid questStepKey)
+        {
+            var questStep = await questRepository.GetQuestStepAsync(questStepKey);
+
+            var nextQuestStep = await questRepository.GetNextQuestStepAsync(questStep.QuestKey, questStep.SortOrder);
+            if (nextQuestStep == null) return;
+            nextQuestStep.SortOrder--;
+            questRepository.Save(nextQuestStep, ctx => ctx.QuestStep, qs => qs.QuestStepKey == nextQuestStep.QuestStepKey);
+            questStep.SortOrder++;
+            questRepository.Save(questStep, ctx => ctx.QuestStep, qs => qs.QuestStepKey == questStep.QuestStepKey);
         }
 
         /// <summary>
@@ -96,9 +130,15 @@ namespace LeaderboardService.Business.Domains
         /// Saves the given quest step.
         /// </summary>
         /// <param name="questStepDto">Transfer object representing the quest step to save.</param>
-        public void SaveQuestStep(QuestStepDto questStepDto)
+        public async Task SaveQuestStep(QuestStepDto questStepDto)
         {
             var entity = questStepDto.ToEntity();
+            var original = await questRepository.GetQuestStepAsync(questStepDto.QuestStepKey);
+            if (original == null)
+            {
+                var nextSortOrder = await questRepository.GetNextSortOrderAsync(questStepDto.QuestKey);
+                entity.SortOrder = ++nextSortOrder;
+            }
             questRepository.Save(entity, ctx => ctx.QuestStep, qs => qs.QuestStepKey == questStepDto.QuestStepKey);
         }
     }

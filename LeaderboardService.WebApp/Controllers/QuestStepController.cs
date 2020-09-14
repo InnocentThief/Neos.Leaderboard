@@ -45,6 +45,52 @@ namespace LeaderboardService.WebApp.Controllers
         }
 
         /// <summary>
+        /// Moves the quest step with the given key on place up (and changes the previous quest step.
+        /// </summary>
+        /// <param name="questStepKey">Unique identifier of the quest step.</param>
+        /// <returns>An awaitable task that yields no retrun value.</returns>
+        [HttpPost]
+        [Route("{questStepKey}/MoveDown")]
+        public async Task<ActionResult> MoveDownAsync(Guid questStepKey)
+        {
+            if (questStepKey == Guid.Empty) return BadRequest();
+
+            try
+            {
+                await questDomain.MoveDownAsync(questStepKey);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Moves the quest step with the given key on place down (and changes the next quest step.
+        /// </summary>
+        /// <param name="questStepKey">Unique identifier of the quest step.</param>
+        /// <returns>An awaitable task that yields no return value.</returns>
+        [HttpPost]
+        [Route("{questStepKey}/MoveUp")]
+        public async Task<ActionResult> MoveUpAsync(Guid questStepKey)
+        {
+            if (questStepKey == Guid.Empty) return BadRequest();
+
+            try
+            {
+                await questDomain.MoveUpAsync(questStepKey);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        /// <summary>
         /// Create a new quest step.
         /// </summary>
         /// <param name="questStepDto">The quest step to create.</param>
@@ -57,8 +103,7 @@ namespace LeaderboardService.WebApp.Controllers
 
             try
             {
-                questDomain.SaveQuestStep(questStepDto);
-                await Task.CompletedTask;
+                await questDomain.SaveQuestStep(questStepDto);
                 return Ok();
             }
             catch (Exception ex)

@@ -98,6 +98,52 @@ namespace DataAccess.Repository
         }
 
         /// <summary>
+        /// Retrieves the max sort order for existing quest steps for the given quest key.
+        /// </summary>
+        /// <param name="questKey">Unique identifier of the quest.</param>
+        /// <returns>An awaitable task that returns the max sort order.</returns>
+        public async Task<int> GetNextSortOrderAsync(Guid questKey)
+        {
+            using var context = GetDatabaseContext();
+            return await context.QuestStep
+                .AsNoTracking()
+                .Where(qs => qs.QuestKey == questKey)
+                .MaxAsync(qs => qs.SortOrder);
+        }
+
+        /// <summary>
+        /// Retrieves the quest step for the given quest with the next sort order .
+        /// </summary>
+        /// <param name="questKey">Unique identifier of the quest.</param>
+        /// <param name="sortOrder">The sort order of the quest step to check for next quest steps.</param>
+        /// <returns>An awaitable task that returns the requested quest step.</returns>
+        public async Task<QuestStep> GetNextQuestStepAsync(Guid questKey, int sortOrder)
+        {
+            using var context = GetDatabaseContext();
+            return await context.QuestStep
+                .AsNoTracking()
+                .Where(qs => qs.QuestKey == questKey)
+                .Where(qs => qs.SortOrder == sortOrder + 1)
+                .SingleOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// Retrieves the quest step for the given quest with the previous sort order .
+        /// </summary>
+        /// <param name="questKey">Unique identifier of the quest.</param>
+        /// <param name="sortOrder">The sort order of the quest step to check for previous quest steps.</param>
+        /// <returns>An awaitable task that returns the requested quest step.</returns>
+        public async Task<QuestStep> GetPreviousQuestStepAsync(Guid questKey, int sortOrder)
+        {
+            using var context = GetDatabaseContext();
+            return await context.QuestStep
+                .AsNoTracking()
+                .Where(qs => qs.QuestKey == questKey)
+                .Where(qs => qs.SortOrder == sortOrder - 1)
+                .SingleOrDefaultAsync();
+        }
+
+        /// <summary>
         /// Retrieves the quest steps for the given quest key.
         /// </summary>
         /// <param name="questKey">Unique identifier of the associated quest.</param>
@@ -107,6 +153,7 @@ namespace DataAccess.Repository
             using var context = GetDatabaseContext();
             return await context.QuestStep
                 .AsNoTracking()
+                .Include(qs => qs.QuestStepProgressions)
                 .Where(qs => qs.QuestKey == questKey)
                 .OrderBy(qs => qs.SortOrder)
                 .ToListAsync();

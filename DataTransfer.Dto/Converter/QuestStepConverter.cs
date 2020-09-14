@@ -27,7 +27,8 @@ namespace DataTransfer.Dto.Converter
                 Name = entity.Name,
                 QuestKey = entity.QuestKey,
                 QuestStepKey = entity.QuestStepKey,
-                SortOrder = entity.SortOrder
+                SortOrder = entity.SortOrder.ToString(),
+                CanReorder = !entity.QuestStepProgressions.Any()
             };
         }
 
@@ -58,7 +59,7 @@ namespace DataTransfer.Dto.Converter
                 Name = dto.Name.JsonCleanUp(),
                 QuestKey = dto.QuestKey,
                 QuestStepKey = dto.QuestStepKey,
-                SortOrder = dto.SortOrder
+                SortOrder = int.Parse(dto.SortOrder)
             };
         }
 

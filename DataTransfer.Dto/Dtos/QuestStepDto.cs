@@ -30,6 +30,11 @@ namespace DataTransfer.Dto.Dtos
         /// <summary>
         /// Gets or sets the sort order for the quest step.
         /// </summary>
-        public int SortOrder { get; set; }
+        public string SortOrder { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether the quest step can be reorderd.
+        /// </summary>
+        public bool CanReorder { get; set; }
     }
 }

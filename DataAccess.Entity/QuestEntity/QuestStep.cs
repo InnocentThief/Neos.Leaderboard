@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Entity.QuestEntity
@@ -41,5 +42,10 @@ namespace DataAccess.Entity.QuestEntity
         /// Gets or sets the related quest as defined by <see cref="QuestKey"/>.
         /// </summary>
         public Quest Quest { get; set; }
+
+        /// <summary>
+        /// Gets or sets a collection of quest step progression.
+        /// </summary>
+        public ICollection<QuestStepProgression> QuestStepProgressions { get; set; }
     }
 }
