@@ -28,7 +28,6 @@ namespace DataTransfer.Dto.Converter
                 QuestKey = entity.QuestKey,
                 QuestStepKey = entity.QuestStepKey,
                 SortOrder = entity.SortOrder.ToString(),
-                CanReorder = !entity.QuestStepProgressions.Any()
             };
         }
 

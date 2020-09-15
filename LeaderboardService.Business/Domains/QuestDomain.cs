@@ -65,10 +65,45 @@ namespace LeaderboardService.Business.Domains
             return quests.ToList().ToDtos();
         }
 
+        /// <summary>
+        /// Retrieves the requested quest step.
+        /// </summary>
+        /// <param name="questStepKey">Unique identifier of the quest step.</param>
+        /// <returns>An awaitable task that returns the requested <see cref="QuestStepDto"/>.</returns>
+        public async Task<QuestStepDto> GetQuestStepAsync(Guid questStepKey)
+        {
+            // Get quest step
+            var questStep = await questRepository.GetQuestStepAsync(questStepKey);
+
+            // Get quest progression
+            var hasQuestProgression = await questRepository.HasQuestProgresssionAsync(questStep.QuestKey);
+
+            // Add progression to dto
+            var retval = questStep.ToDto();
+            retval.CanReorder = !hasQuestProgression;
+            return retval;
+        }
+
+        /// <summary>
+        /// Retrieves the quest step for the given quest.
+        /// </summary>
+        /// <param name="questKey">Unique identifier of the quest.</param>
+        /// <returns>An awaitable task that returns a collection of <see cref="QuestStepDto"/>.</returns>
         public async Task<IEnumerable<QuestStepDto>> GetQuestStepsAsync(Guid questKey)
         {
+            // Get quest steps
             var questSteps = await questRepository.GetQuestStepsAsync(questKey);
-            return questSteps.ToList().ToDtos();
+
+            // Get quest progression
+            var hasQuestProgression = await questRepository.HasQuestProgresssionAsync(questKey);
+
+            // Add progression to quest steps
+            var retval = questSteps.ToList().ToDtos();
+            foreach (var questStep in retval)
+            {
+                questStep.CanReorder = !hasQuestProgression;
+            }
+            return retval;
         }
 
         /// <summary>

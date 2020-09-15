@@ -27,7 +27,6 @@ namespace DataTransfer.Dto.Converter
                 Description = entity.Description,
                 Name = entity.Name,
                 QuestKey = entity.QuestKey,
-                StepCount = entity.QuestSteps != null ? entity.QuestSteps.Count().ToString() : "0"
             };
         }
 

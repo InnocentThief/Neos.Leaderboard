@@ -26,10 +26,5 @@ namespace DataTransfer.Dto.Dtos
         /// Gets or sets the description of the quest.
         /// </summary>
         public string Description { get; set; }
-
-        /// <summary>
-        /// Gets or sets the amount of steps the quest has.
-        /// </summary>
-        public string StepCount { get; set; }
     }
 }

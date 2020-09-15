@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace DataAccess.Repository
@@ -63,7 +62,6 @@ namespace DataAccess.Repository
             using var context = GetDatabaseContext();
             return await context.Quest
                 .AsNoTracking()
-                .Include(q => q.QuestSteps)
                 .SingleOrDefaultAsync(q => q.QuestKey == questKey);
         }
 
@@ -78,23 +76,9 @@ namespace DataAccess.Repository
             using var context = GetDatabaseContext();
             return await context.Quest
                 .AsNoTracking()
-                .Include(q => q.QuestSteps)
                 .Where(q => q.AccountKey == accountKey)
                 .OrderBy(q => q.Name)
                 .ToListAsync();
-        }
-
-        /// <summary>
-        /// Retrieves the quest step for the given quest step key.
-        /// </summary>
-        /// <param name="questStepKey">Unique identifier of the quest step.</param>
-        /// <returns>An awaitable task that returns the requested quest step.</returns>
-        public async Task<QuestStep> GetQuestStepAsync(Guid questStepKey)
-        {
-            using var context = GetDatabaseContext();
-            return await context.QuestStep
-                .AsNoTracking()
-                .SingleOrDefaultAsync(qs => qs.QuestStepKey == questStepKey);
         }
 
         /// <summary>
@@ -144,6 +128,19 @@ namespace DataAccess.Repository
         }
 
         /// <summary>
+        /// Retrieves the quest step for the given quest step key.
+        /// </summary>
+        /// <param name="questStepKey">Unique identifier of the quest step.</param>
+        /// <returns>An awaitable task that returns the requested quest step.</returns>
+        public async Task<QuestStep> GetQuestStepAsync(Guid questStepKey)
+        {
+            using var context = GetDatabaseContext();
+            return await context.QuestStep
+                .AsNoTracking()
+                .SingleOrDefaultAsync(qs => qs.QuestStepKey == questStepKey);
+        }
+
+        /// <summary>
         /// Retrieves the quest steps for the given quest key.
         /// </summary>
         /// <param name="questKey">Unique identifier of the associated quest.</param>
@@ -153,7 +150,6 @@ namespace DataAccess.Repository
             using var context = GetDatabaseContext();
             return await context.QuestStep
                 .AsNoTracking()
-                .Include(qs => qs.QuestStepProgressions)
                 .Where(qs => qs.QuestKey == questKey)
                 .OrderBy(qs => qs.SortOrder)
                 .ToListAsync();
@@ -175,6 +171,18 @@ namespace DataAccess.Repository
                 .Select(g => new QuestLeaderboardEntry { Username = g.Key, QuestStepsDone = g.Count() })
                 .OrderByDescending(lb => lb.QuestStepsDone)
                 .ToListAsync();
+        }
+
+        /// <summary>
+        /// Gets whether the quest has quest steps with a progression (done by an account).
+        /// </summary>
+        /// <param name="questKey">Unique identifier of the quest.</param>
+        /// <returns>An awaitable task that returns true if the quest has quest steps with progression.</returns>
+        public async Task<bool> HasQuestProgresssionAsync(Guid questKey)
+        {
+            using var context = GetDatabaseContext();
+            return await context.QuestStepProgression
+                .AnyAsync(qsp => qsp.QuestStep.QuestKey == questKey);
         }
     }
 }

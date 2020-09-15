@@ -40,8 +40,8 @@ namespace LeaderboardService.WebApp.Controllers
         {
             if (questStepKey == Guid.Empty) return BadRequest();
 
-            await Task.CompletedTask;
-            return new QuestStepDto();
+            var questStep = await questDomain.GetQuestStepAsync(questStepKey);
+            return questStep;
         }
 
         /// <summary>
