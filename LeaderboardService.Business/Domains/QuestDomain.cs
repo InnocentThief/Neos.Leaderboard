@@ -174,6 +174,10 @@ namespace LeaderboardService.Business.Domains
                 var nextSortOrder = await questRepository.GetNextSortOrderAsync(questStepDto.QuestKey);
                 entity.SortOrder = ++nextSortOrder;
             }
+            else
+            {
+                entity.SortOrder = original.SortOrder;
+            }
             questRepository.Save(entity, ctx => ctx.QuestStep, qs => qs.QuestStepKey == questStepDto.QuestStepKey);
         }
     }
