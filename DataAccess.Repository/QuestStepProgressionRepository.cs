@@ -35,29 +35,29 @@ namespace DataAccess.Repository
         /// Gets the quest step progression for the given quest step and account.
         /// </summary>
         /// <param name="questStepKey">Unique identifier of the quest step.</param>
-        /// <param name="accountKey">Unique identifier of the account.</param>
+        /// <param name="username">Name of the user that solved the quest step.</param>
         /// <returns>An awaitable task that returns the requested <see cref="QuestStepProgression"/>.</returns>
-        public async Task<QuestStepProgression> GetQuestStepProgressionAsync(Guid questStepKey, Guid accountKey)
+        public async Task<QuestStepProgression> GetQuestStepProgressionAsync(Guid questStepKey, string username)
         {
             using var context = GetDatabaseContext();
             return await context.QuestStepProgression
-                .SingleOrDefaultAsync(qsp => qsp.QuestStepKey == questStepKey && qsp.AccountKey == accountKey);
+                .SingleOrDefaultAsync(qsp => qsp.QuestStepKey == questStepKey && qsp.Username == username);
         }
 
         /// <summary>
         /// Retrieves if the previous quest step has been done by the account.
         /// </summary>
         /// <param name="questKey">Unique identifier of the quest.</param>
-        /// <param name="accountKey">Unique identifier of the account.</param>
+        /// <param name="username">Nae of the user that solved the quest step.</param>
         /// <param name="previousQuestStepOrder">The quest step order to check.</param>
         /// <returns>An awaitable task that returns true if the previous quest step has been done.</returns>
-        public async Task<bool> IsPreviousQuestStepDone(Guid questKey, Guid accountKey, int previousQuestStepOrder)
+        public async Task<bool> IsPreviousQuestStepDone(Guid questKey, string username, int previousQuestStepOrder)
         {
             using var context = GetDatabaseContext();
             return await context.QuestStepProgression
                 .AsNoTracking()
                 .Where(qsp => qsp.QuestStep.QuestKey == questKey)
-                .Where(qsp => qsp.AccountKey == accountKey)
+                .Where(qsp => qsp.Username == username)
                 .Where(qsp => qsp.QuestStep.SortOrder == previousQuestStepOrder)
                 .AnyAsync();
         }

@@ -21,9 +21,9 @@ namespace DataAccess.Entity.QuestEntity
         public Guid QuestStepKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the unique identifier of the related account.
+        /// Gets or sets the name of the user that solved the quest step.
         /// </summary>
-        public Guid AccountKey { get; set; }
+        public string Username { get; set; }
 
         /// <summary>
         /// Gets or sets the date and time the quest step was resolved by the account.

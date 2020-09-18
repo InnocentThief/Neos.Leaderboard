@@ -41,28 +41,24 @@ namespace LeaderboardService.Business.Domains
         /// <returns>An awaitable task that returns true if the quest step progression has been added.</returns>
         public async Task<bool> ProgressAsync(QuestStepProgressionDto questStepProgressionDto)
         {
-            // Get account
-            var account = await accountRepository.GetAccountAsync(questStepProgressionDto.Username);
-            if (account == null) return false;
-
             // Get quest steps
             var questStep = await questRepository.GetQuestStepAsync(questStepProgressionDto.QuestStepKey);
             if (questStep == null) return false;
 
-            var existingQuestStepProgression = await questStepProgressionRepository.GetQuestStepProgressionAsync(questStepProgressionDto.QuestStepKey, account.AccountKey);
+            var existingQuestStepProgression = await questStepProgressionRepository.GetQuestStepProgressionAsync(questStepProgressionDto.QuestStepKey, questStepProgressionDto.Username);
             if (existingQuestStepProgression != null) return false;
 
             // Check if previous quest step is done
             if (questStep.SortOrder > 0)
             {
-                var previousQuestStepDone = await questStepProgressionRepository.IsPreviousQuestStepDone(questStep.QuestKey, account.AccountKey, questStep.SortOrder - 1);
+                var previousQuestStepDone = await questStepProgressionRepository.IsPreviousQuestStepDone(questStep.QuestKey, questStepProgressionDto.Username, questStep.SortOrder - 1);
                 if (!previousQuestStepDone) return false;
             }
 
             // Add new quest step progression
             var questStepProgression = new QuestStepProgression
             {
-                AccountKey = account.AccountKey,
+                Username = questStepProgressionDto.Username,
                 QuestStepKey = questStep.QuestStepKey,
                 QuestStepProgressionKey = Guid.NewGuid(),
                 ResolvedOn = DateTime.Now

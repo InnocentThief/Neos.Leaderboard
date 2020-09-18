@@ -165,9 +165,8 @@ namespace DataAccess.Repository
             using var context = GetDatabaseContext();
             return await context.QuestStepProgression
                 .AsNoTracking()
-                .Include(qsp => qsp.Account)
                 .Where(qsp => qsp.QuestStep.QuestKey == questKey)
-                .GroupBy(qsp => qsp.Account.Username)
+                .GroupBy(qsp => qsp.Username)
                 .Select(g => new QuestLeaderboardEntry { Username = g.Key, QuestStepsDone = g.Count() })
                 .OrderByDescending(lb => lb.QuestStepsDone)
                 .ToListAsync();
