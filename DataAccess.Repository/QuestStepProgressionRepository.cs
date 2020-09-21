@@ -32,6 +32,24 @@ namespace DataAccess.Repository
         }
 
         /// <summary>
+        /// Gets the last quest step that has been done by the user.
+        /// </summary>
+        /// <param name="questKey">Unique identifier of the quest.</param>
+        /// <param name="username">The username.</param>
+        /// <returns>An awaitable task that returns the last quest step that has been done by the user.</returns>
+        public async Task<QuestStepProgression> GetLastStepDoneAsync(Guid questKey, string username)
+        {
+            using var context = GetDatabaseContext();
+            return await context.QuestStepProgression
+                .AsNoTracking()
+                .Include(qsp => qsp.QuestStep)
+                .Where(qsp => qsp.QuestStep.QuestKey == questKey)
+                .Where(qsp => qsp.Username == username)
+                .OrderByDescending(qs => qs.QuestStep.SortOrder)
+                .FirstOrDefaultAsync();
+        }
+
+        /// <summary>
         /// Gets the quest step progression for the given quest step and account.
         /// </summary>
         /// <param name="questStepKey">Unique identifier of the quest step.</param>
@@ -41,6 +59,7 @@ namespace DataAccess.Repository
         {
             using var context = GetDatabaseContext();
             return await context.QuestStepProgression
+                .AsNoTracking()
                 .SingleOrDefaultAsync(qsp => qsp.QuestStepKey == questStepKey && qsp.Username == username);
         }
 

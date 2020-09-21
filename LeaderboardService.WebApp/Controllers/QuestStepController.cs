@@ -50,7 +50,7 @@ namespace LeaderboardService.WebApp.Controllers
         /// <param name="questStepKey">Unique identifier of the quest step.</param>
         /// <returns>An awaitable task that yields no retrun value.</returns>
         [HttpPost]
-        [Route("{questStepKey}/MoveDown")]
+        [Route("{questStepKey}/movedown")]
         public async Task<ActionResult> MoveDownAsync(Guid questStepKey)
         {
             if (questStepKey == Guid.Empty) return BadRequest();
@@ -73,7 +73,7 @@ namespace LeaderboardService.WebApp.Controllers
         /// <param name="questStepKey">Unique identifier of the quest step.</param>
         /// <returns>An awaitable task that yields no return value.</returns>
         [HttpPost]
-        [Route("{questStepKey}/MoveUp")]
+        [Route("{questStepKey}/moveup")]
         public async Task<ActionResult> MoveUpAsync(Guid questStepKey)
         {
             if (questStepKey == Guid.Empty) return BadRequest();

@@ -34,10 +34,5 @@ namespace DataAccess.Entity.QuestEntity
         /// Gets or sets the related quest step as defined by <see cref="QuestStepKey"/>.
         /// </summary>
         public QuestStep QuestStep { get; set; }
-
-        /// <summary>
-        /// Gets or sets the related account as defined by <see cref="AccountKey"/>.
-        /// </summary>
-        public Account Account { get; set; }
     }
 }

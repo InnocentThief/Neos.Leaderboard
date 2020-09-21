@@ -14,7 +14,12 @@ namespace LeaderboardService.Business.Domains
     /// </summary>
     public sealed class QuestDomain
     {
+        #region Private fields
+
         private readonly QuestRepository questRepository;
+        private readonly QuestStepProgressionRepository questStepProgressionRepository;
+
+        #endregion
 
         /// <summary>
         /// Initializes a new <see cref="QuestDomain"/>.
@@ -23,6 +28,7 @@ namespace LeaderboardService.Business.Domains
         public QuestDomain(IConfiguration configuration)
         {
             questRepository = new QuestRepository(configuration);
+            questStepProgressionRepository = new QuestStepProgressionRepository(configuration);
         }
 
         /// <summary>
@@ -115,6 +121,29 @@ namespace LeaderboardService.Business.Domains
         {
             var leaderboardEntries = await questRepository.GetLeaderboardAsync(questKey);
             return leaderboardEntries.ToList().ToDtos();
+        }
+
+        /// <summary>
+        /// Retrieves the next quest step fro the given quest and user.
+        /// </summary>
+        /// <param name="questKey">Unique identifier of the quest.</param>
+        /// <param name="username">Username for which to get the next quest step.</param>
+        /// <returns>An awaitable task that returns a quest step.</returns>
+        public async Task<QuestStepDto> GetNextQuestStepForUserAsync(Guid questKey, string username)
+        {
+            var questSteps = await questRepository.GetQuestStepsAsync(questKey);
+            if (!questSteps.Any()) return null;
+            var lastQuestStepDone = await questStepProgressionRepository.GetLastStepDoneAsync(questKey, username);
+            if (lastQuestStepDone == null)
+            {
+                return questSteps.First().ToDto();
+            }
+            else
+            {
+                var nextQuestStep = questSteps.SingleOrDefault(qs => qs.SortOrder == lastQuestStepDone.QuestStep.SortOrder + 1);
+                if (nextQuestStep != null) return nextQuestStep.ToDto();
+                return null;
+            }
         }
 
         /// <summary>

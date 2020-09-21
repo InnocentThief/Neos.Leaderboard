@@ -96,6 +96,31 @@ namespace LeaderboardService.WebApp.Controllers
         }
 
         /// <summary>
+        /// Retrieves the next quest step fro the given quest and user.
+        /// </summary>
+        /// <param name="questKey">Unique identifier of the quest.</param>
+        /// <param name="username">Username for which to get the next quest step.</param>
+        /// <returns>An awaitable task that returns a quest step.</returns>
+        [HttpGet]
+        [Route("{questKey}/nextqueststep")]
+        public async Task<ActionResult<QuestStepDto>> GetNextQuestStepForUserAsync(Guid questKey, [FromQuery] string username)
+        {
+            if (questKey == Guid.Empty) return BadRequest();
+            if (string.IsNullOrWhiteSpace(username)) return BadRequest();
+
+            try
+            {
+                var questStep = await questDomain.GetNextQuestStepForUserAsync(questKey, username);
+                return questStep;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        /// <summary>
         /// Creates a new quest.
         /// </summary>
         /// <param name="questDto">The quest to create.</param>
