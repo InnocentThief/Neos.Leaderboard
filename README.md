@@ -19,8 +19,8 @@ Route | Action | Description
 ../api/queststeps/[Guid] | GET | Gets the quest step for the given key
 ../api/queststeps | POST | Adds or updates the given quest steps
 ../api/queststeps | DELETE | Deletes the quest step with the given key. Not yet implemented.
-../api/queststeps/[Guid]/movedown | POST | Moves the given quest step to the previous position and changes the previous quest step
-../api/queststeps/[Guid]/moveup | POST | Moves the given quest step to the next position and changes the next quest step
+../api/queststeps/[Guid]/movedown | POST | Moves the given quest step to the previous position and changes the previous quest step. Do not move quest steps when CanReorder is false
+../api/queststeps/[Guid]/moveup | POST | Moves the given quest step to the next position and changes the next quest step. Do not move quest steps when CanReorder is false
 ../api/queststepprogressions | POST | Adds a new quest step progression for the given dto
 
 # Gamemanager (tbd)
