@@ -86,13 +86,13 @@ namespace DataAccess.Repository
         /// </summary>
         /// <param name="questKey">Unique identifier of the quest.</param>
         /// <returns>An awaitable task that returns the max sort order.</returns>
-        public async Task<int> GetNextSortOrderAsync(Guid questKey)
+        public async Task<int> GetMaxSortOrderAsync(Guid questKey)
         {
             using var context = GetDatabaseContext();
             return await context.QuestStep
                 .AsNoTracking()
                 .Where(qs => qs.QuestKey == questKey)
-                .MaxAsync(qs => qs.SortOrder);
+                .MaxAsync(qs => (int?)qs.SortOrder) ?? 0;
         }
 
         /// <summary>
@@ -173,6 +173,19 @@ namespace DataAccess.Repository
         }
 
         /// <summary>
+        /// Gets whether the quest with given key has quest steps.
+        /// </summary>
+        /// <param name="questKey">Unique identifier of the quest.</param>
+        /// <returns>An awaitable task that returns true if quest steps are available.</returns>
+        public async Task<bool> HasQuestStepsAsync(Guid questKey)
+        {
+            using var context = GetDatabaseContext();
+            return await context.QuestStep
+                .AsNoTracking()
+                .AnyAsync(qs => qs.QuestKey == questKey);
+        }
+
+        /// <summary>
         /// Gets whether the quest has quest steps with a progression (done by an account).
         /// </summary>
         /// <param name="questKey">Unique identifier of the quest.</param>
@@ -181,6 +194,7 @@ namespace DataAccess.Repository
         {
             using var context = GetDatabaseContext();
             return await context.QuestStepProgression
+                .AsNoTracking()
                 .AnyAsync(qsp => qsp.QuestStep.QuestKey == questKey);
         }
     }

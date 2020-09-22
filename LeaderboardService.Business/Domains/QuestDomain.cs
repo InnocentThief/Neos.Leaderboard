@@ -197,16 +197,26 @@ namespace LeaderboardService.Business.Domains
         public async Task SaveQuestStep(QuestStepDto questStepDto)
         {
             var entity = questStepDto.ToEntity();
-            var original = await questRepository.GetQuestStepAsync(questStepDto.QuestStepKey);
-            if (original == null)
+
+            var hasQuestSteps = await questRepository.HasQuestStepsAsync(questStepDto.QuestKey);
+            if (hasQuestSteps)
             {
-                var nextSortOrder = await questRepository.GetNextSortOrderAsync(questStepDto.QuestKey);
-                entity.SortOrder = ++nextSortOrder;
+                var original = await questRepository.GetQuestStepAsync(questStepDto.QuestStepKey);
+                if (original == null)
+                {
+                    var maxSortOrder = await questRepository.GetMaxSortOrderAsync(questStepDto.QuestKey);
+                    entity.SortOrder = maxSortOrder + 1;
+                }
+                else
+                {
+                    entity.SortOrder = original.SortOrder;
+                }
             }
             else
             {
-                entity.SortOrder = original.SortOrder;
+                entity.SortOrder = 0;
             }
+
             questRepository.Save(entity, ctx => ctx.QuestStep, qs => qs.QuestStepKey == questStepDto.QuestStepKey);
         }
     }
