@@ -5,6 +5,9 @@
     /// </summary>
     public class QuestLeaderboardEntryDto
     {
+
+        public string Position { get; set; }
+
         /// <summary>
         /// Gets or sets the username
         /// </summary>
@@ -13,6 +16,6 @@
         /// <summary>
         /// Gets or sets the amount of quest steps done by the user.
         /// </summary>
-        public int QuestStepsDone { get; set; }
+        public string QuestStepsDone { get; set; }
     }
 }

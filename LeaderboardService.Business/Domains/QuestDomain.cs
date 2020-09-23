@@ -120,7 +120,16 @@ namespace LeaderboardService.Business.Domains
         public async Task<IEnumerable<QuestLeaderboardEntryDto>> GetLeaderboardAsync(Guid questKey)
         {
             var leaderboardEntries = await questRepository.GetLeaderboardAsync(questKey);
-            return leaderboardEntries.ToList().ToDtos();
+            var retval = leaderboardEntries.ToList().ToDtos();
+
+            var position = 1;
+            foreach (var leaderboardEntry in retval)
+            {
+                leaderboardEntry.Position = position.ToString();
+                position++;
+            }
+
+            return retval;
         }
 
         /// <summary>

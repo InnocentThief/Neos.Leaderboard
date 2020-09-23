@@ -22,7 +22,7 @@ namespace DataTransfer.Dto.Converter
 
             return new QuestLeaderboardEntryDto
             {
-                QuestStepsDone = entity.QuestStepsDone,
+                QuestStepsDone = entity.QuestStepsDone.ToString(),
                 Username = entity.Username
             };
         }
