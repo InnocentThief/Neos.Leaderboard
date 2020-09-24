@@ -119,6 +119,11 @@ namespace LeaderboardService.Business.Domains
         /// <returns>An awaitable task that returns the requested leader board.</returns>
         public async Task<IEnumerable<QuestLeaderboardEntryDto>> GetLeaderboardAsync(Guid questKey)
         {
+            // Get quest steps in order to show the amount of available quest steps
+            var questSteps = await questRepository.GetQuestStepsAsync(questKey);
+            var questStepsAvailable = questSteps.Count().ToString();
+
+            // Get quest progression / leader board entries
             var leaderboardEntries = await questRepository.GetLeaderboardAsync(questKey);
             var retval = leaderboardEntries.ToList().ToDtos();
 
@@ -126,6 +131,7 @@ namespace LeaderboardService.Business.Domains
             foreach (var leaderboardEntry in retval)
             {
                 leaderboardEntry.Position = position.ToString();
+                leaderboardEntry.QuestStepsAvailable = questStepsAvailable;
                 position++;
             }
 

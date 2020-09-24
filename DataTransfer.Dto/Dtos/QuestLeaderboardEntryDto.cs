@@ -17,5 +17,10 @@
         /// Gets or sets the amount of quest steps done by the user.
         /// </summary>
         public string QuestStepsDone { get; set; }
+
+        /// <summary>
+        /// Gets or sets the amount of quest steps available for the current quest.
+        /// </summary>
+        public string QuestStepsAvailable { get; set; }
     }
 }
