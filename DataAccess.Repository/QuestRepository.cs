@@ -167,8 +167,8 @@ namespace DataAccess.Repository
                 .AsNoTracking()
                 .Where(qsp => qsp.QuestStep.QuestKey == questKey)
                 .GroupBy(qsp => qsp.Username)
-                .Select(g => new QuestLeaderboardEntry { Username = g.Key, QuestStepsDone = g.Count() })
-                .OrderByDescending(lb => lb.QuestStepsDone)
+                .Select(g => new QuestLeaderboardEntry { Username = g.Key, QuestStepsDone = g.Count(), LastResolvedTime = g.Max(p => p.ResolvedOn) })
+                .OrderByDescending(lb => lb.QuestStepsDone).ThenBy(lb => lb.LastResolvedTime)
                 .ToListAsync();
         }
 
